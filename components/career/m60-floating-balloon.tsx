@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function M60FloatingBalloon() {
+  const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(true)
   const [isAnimating, setIsAnimating] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
@@ -69,7 +71,7 @@ export function M60FloatingBalloon() {
             <button
               onClick={handleToggle}
               className="absolute top-3 right-3 p-1.5 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-sm"
-              aria-label="Ocultar"
+              aria-label={t("results.m60.hide")}
             >
               <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
@@ -81,7 +83,7 @@ export function M60FloatingBalloon() {
                 <div className="w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-md flex items-center justify-center overflow-hidden">
                   <Image
                     src="/characters/m60-octopus.png"
-                    alt="M60 Mascote"
+                    alt={t("results.m60.mascotAlt")}
                     width={48}
                     height={48}
                     className="w-12 h-12 object-contain"
@@ -92,17 +94,17 @@ export function M60FloatingBalloon() {
               {/* Text content */}
               <div className="flex-1 pr-4">
                 <h3 className="font-bold text-gray-900 dark:text-white text-base mb-0.5">
-                  M60 - Universidade do Intercambio
+                  {t("results.m60.title")}
                 </h3>
                 <p className="text-xs text-orange-600 dark:text-orange-400 font-medium mb-2">
-                  Seu parceiro para desenvolvimento de carreira global
+                  {t("results.m60.subtitle")}
                 </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
-              O M60 pode te ajudar a alcancar sua carreira dos sonhos atraves de experiencias internacionais, cursos no exterior e networking global. Desenvolva suas soft skills vivenciando culturas diferentes!
+              {t("results.m60.description")}
             </p>
 
             {/* CTA Button */}
@@ -111,7 +113,7 @@ export function M60FloatingBalloon() {
               className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-5 rounded-xl shadow-lg hover:shadow-xl transition-all"
             >
               <a href="https://m60.com.br" target="_blank" rel="noopener noreferrer">
-                Conhecer o M60
+                {t("results.m60.cta")}
               </a>
             </Button>
           </div>
@@ -129,11 +131,11 @@ export function M60FloatingBalloon() {
           style={{
             animation: "float 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite"
           }}
-          aria-label="Abrir M60"
+          aria-label={t("results.m60.open")}
         >
           <Image
             src="/characters/m60-octopus.png"
-            alt="M60 Mascote"
+            alt={t("results.m60.mascotAlt")}
             width={52}
             height={52}
             className="w-13 h-13 object-contain"

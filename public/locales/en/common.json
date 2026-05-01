@@ -1,0 +1,603 @@
+{
+  "brand": {
+    "tagline": "Preparation for the Future",
+    "logoAlt": "CarrIA Logo"
+  },
+  "language": {
+    "selector": "Language selector"
+  },
+  "metadata": {
+    "title": "CarrIA - Discover Your Professional Potential",
+    "description": "We do not recommend popular careers, we recommend careers compatible with how you work. AI-based career mapping platform with gamification, simulations, and international networking."
+  },
+  "welcome": {
+    "heroTextStart": "We do not recommend popular careers, we recommend careers",
+    "heroTextHighlight": "compatible with how you work",
+    "heroTextEnd": "Resumes show the past. Our system shows your",
+    "heroTextPotential": "potential",
+    "profileExamples": "Examples of profiles that may match you",
+    "discoverProfile": "Discover My Profile",
+    "exclusiveClassification": "Receive your",
+    "exclusive": "exclusive classification",
+    "classificationExample": "Your classification will look like:",
+    "fullCode": "Full code:",
+    "mappedYouth": "Young people mapped",
+    "globalCareers": "Global careers",
+    "satisfaction": "Satisfaction",
+    "startTitle": "Let's get started!",
+    "startDescription": "Fill in your details to personalize your experience",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Your first name",
+    "age": "Age",
+    "agePlaceholder": "Your age",
+    "dreamCareer": "Dream Career",
+    "dreamCareerPlaceholder": "Select your dream career",
+    "conditionsQuestion": "Do you have any condition you would like to share?",
+    "conditionsHint": "Optional - select all that apply",
+    "startTest": "Start Test",
+    "dataUsage": "Your data will only be used to personalize your results",
+    "errors": {
+      "name": "Please enter your first name",
+      "ageRequired": "Please enter your age",
+      "ageInvalid": "Please enter a valid age (10-99)",
+      "dreamCareer": "Please select your dream career"
+    },
+    "features": {
+      "aiTitle": "Personalized AI",
+      "aiDescription": "Analysis of PROFILE, GOALS, and RHYTHMS",
+      "gameTitle": "Gamification",
+      "gameDescription": "Interactive tests and real situations",
+      "networkTitle": "Global Networking",
+      "networkDescription": "Relevant international connections",
+      "simulationTitle": "Simulations",
+      "simulationDescription": "Visualize your career path"
+    },
+    "pillars": {
+      "profile": "PROFILE",
+      "profileDescription": "Who you are",
+      "goals": "GOALS",
+      "goalsDescription": "Where you want to go",
+      "rhythms": "RHYTHMS",
+      "rhythmsDescription": "How you learn"
+    },
+    "audiences": {
+      "schools": "For Schools",
+      "schoolsDescription": "Vocational guidance + college recommendations aligned with the profile",
+      "companies": "For Companies",
+      "companiesDescription": "Candidate selection and career transition based on classification",
+      "youth": "For Young People",
+      "youthDescription": "Discover how to start professional life with clarity and direction",
+      "students": "For University Students",
+      "studentsDescription": "Develop soft skills and prepare for the global market with exchange programs"
+    },
+    "footer": {
+      "about": "About us",
+      "who": "Who we are",
+      "mission": "Mission and values",
+      "careers": "Careers",
+      "team": "Our team",
+      "leadership": "Leadership",
+      "specialists": "Specialists",
+      "workWithUs": "Work with us",
+      "partners": "Our partners",
+      "exchanges": "Exchange programs",
+      "universities": "Universities",
+      "companies": "Companies",
+      "history": "Our story",
+      "timeline": "Timeline",
+      "achievements": "Achievements",
+      "testimonials": "Testimonials",
+      "contact": "Contact us",
+      "support": "Support",
+      "partnerships": "Partnerships",
+      "press": "Press",
+      "rights": "2024 CarrIA. All rights reserved."
+    },
+    "conditions": {
+      "adhd": "ADHD",
+      "autism": "Autism",
+      "dyslexia": "Dyslexia",
+      "other": "Other"
+    },
+    "careers": {
+      "graphicDesigner": "Graphic Designer",
+      "softwareEngineer": "Software Engineer",
+      "dataScientist": "Data Scientist",
+      "doctor": "Doctor",
+      "psychologist": "Psychologist",
+      "innovationConsultant": "Innovation Consultant",
+      "architect": "Architect",
+      "entrepreneur": "Entrepreneur",
+      "teacher": "Educator / Teacher",
+      "gameDeveloper": "Game Developer",
+      "advertisingProfessional": "Advertising Professional",
+      "productManager": "Product Manager",
+      "dataAnalyst": "Data Analyst",
+      "lawyer": "Lawyer",
+      "civilEngineer": "Civil Engineer",
+      "mechanicalEngineer": "Mechanical Engineer",
+      "interiorDesigner": "Interior Designer",
+      "uxUiDesigner": "UX/UI Designer",
+      "scientist": "Scientist",
+      "researcher": "Researcher",
+      "digitalMarketing": "Digital Marketing",
+      "journalist": "Journalist",
+      "digitalInfluencer": "Digital Influencer",
+      "nurse": "Nurse",
+      "physiotherapist": "Physiotherapist",
+      "nutritionist": "Nutritionist",
+      "veterinarian": "Veterinarian",
+      "economist": "Economist",
+      "accountant": "Accountant",
+      "administrator": "Administrator",
+      "humanResources": "Human Resources",
+      "other": "Other"
+    }
+  },
+  "question": {
+    "decision": {
+      "title": "When you need to solve something important, do you usually act on impulse or think before deciding?",
+      "impulsive": "Impulsive",
+      "planned": "Planned",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Tell us how you usually make decisions when something really matters.",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm",
+      "nexo": "Let's understand how you make important decisions. This reveals a lot about your strategic profile!"
+    },
+    "startProjects": {
+      "nexo": "The way you start projects is a key characteristic of your professional profile.",
+      "title": "When you start something new, do you prefer to jump straight in or understand it better before starting?",
+      "leftLabel": "Start quickly",
+      "rightLabel": "Understand first",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "How do you usually react when you're starting something completely new?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "replan": {
+      "nexo": "Flexibility and planning go hand in hand in the modern professional world.",
+      "title": "If something goes wrong along the way, do you tend to fix it immediately or pause to reorganize everything?",
+      "leftLabel": "Fix immediately",
+      "rightLabel": "Replan",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Can you recall a time when something did not go as expected? What did you do?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "preferences": {
+      "nexo": "Understanding your preferences is the first step to strengthening them!",
+      "title": "Do you feel more comfortable when you know exactly what will happen, or when you can discover things gradually?",
+      "leftLabel": "Discover gradually",
+      "rightLabel": "Know beforehand",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Do you prefer to stay in control of the situation or adapt to what comes along?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "followIdeas": {
+      "nexo": "Problem-solving is a highly valued skill in the market!",
+      "title": "Do you prefer following ready-made ideas or creating your own ways of doing things?",
+      "leftLabel": "Follow",
+      "rightLabel": "Create",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Do you usually follow examples or prefer to do things your own way?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "taskStyle": {
+      "nexo": "The way you approach tasks says a lot about what kind of career will make you happy!",
+      "title": "When someone gives you a task, do you prefer to follow instructions or add your own touch?",
+      "leftLabel": "Follow instructions",
+      "rightLabel": "Personalize",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "When someone guides you, do you adapt or follow exactly as explained?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "motivation": {
+      "nexo": "Motivation and creativity are essential skills!",
+      "title": "Do you feel more motivated when everything is already defined or when you can explore possibilities?",
+      "leftLabel": "Everything defined",
+      "rightLabel": "Explore",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "What motivates you more: a structured plan or the freedom to explore ideas?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "focusMultitask": {
+      "nexo": "Balancing focus and multitasking is a constant challenge at work!",
+      "title": "Do you prefer finishing one thing at a time or handling multiple tasks at once?",
+      "leftLabel": "One at a time",
+      "rightLabel": "Multiple at once",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Do you prefer focusing on one thing or splitting your attention across multiple tasks?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "persistence": {
+      "nexo": "Your persistence says a lot about your professional style!",
+      "title": "When you start something, do you usually stick with it despite difficulties or lose interest along the way?",
+      "leftLabel": "Lose interest",
+      "rightLabel": "Stay until the end",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Think of something you started — what made you continue or stop?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "workPace": {
+      "nexo": "How you handle your work pace says a lot about your professional maturity!",
+      "title": "Do you feel more comfortable following a defined pace or creating your own rhythm?",
+      "leftLabel": "Follow a pace",
+      "rightLabel": "Create your own pace",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Do you prefer routine or freedom to work at your own pace?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "communicationStyle": {
+      "nexo": "Emotional intelligence is essential for any successful career!",
+      "title": "Do you usually say what you think right away or prefer to observe before taking a position?",
+      "leftLabel": "Speak immediately",
+      "rightLabel": "Observe",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "In conversations, do you tend to speak quickly or observe more before sharing your opinion?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "leadershipInitiative": {
+      "nexo": "What you do when no one leads reflects the leader you can become!",
+      "title": "In a situation where no one makes a decision, do you tend to step forward or wait for someone else to take initiative?",
+      "leftLabel": "Wait",
+      "rightLabel": "Lead",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "When no one makes a decision, do you usually act or wait for someone else to start?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "participationStyle": {
+      "nexo": "Final question! Your participation style is essential for your career!",
+      "title": "Do you feel more comfortable being the center of interactions or participating in a more discreet way?",
+      "leftLabel": "Reserved",
+      "rightLabel": "Protagonist",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "In a group, do you tend to stand out or prefer to participate more quietly?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "creativeProblemSolving": {
+      "nexo": "Time to explore your creativity! How do you approach problems and challenges?",
+      "title": "When something does not work as expected, do you usually repeat what you already know or try something different?",
+      "leftLabel": "Repeat",
+      "rightLabel": "Create something new",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "Have you ever solved something in a different way?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "executionStart": {
+      "nexo": "Now let's see how you execute and deliver results!",
+      "title": "When you have several things to do, do you usually organize everything first or solve things as they come up?",
+      "leftLabel": "Go as it comes",
+      "rightLabel": "Organize first",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "How do you organize yourself when you have several tasks at the same time?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    },
+    "relationshipStart": {
+      "nexo": "Final section! Let's understand how you relate to other people at work.",
+      "title": "When you need to solve something difficult, do you prefer doing it alone or exchanging ideas with other people?",
+      "leftLabel": "Alone",
+      "rightLabel": "With people",
+      "notesLabel": "Notes (optional)",
+      "placeholder": "When a problem comes up, do you usually ask for opinions or solve it on your own?",
+      "analysis": "Analyzing:",
+      "profile": "Profile",
+      "goals": "Goals",
+      "rhythms": "Rhythms",
+      "confirm": "Confirm"
+    }
+  },
+  "nexo": {
+    "reaction": {
+      "intro": "Great! Now I want to test your reaction speed. This helps me understand your decision-making style under pressure."
+    },
+    "name": "Nexo"
+  },
+  "reactionTest": {
+    "title": "Reaction Test",
+    "instruction": "Click quickly when the screen turns green",
+    "question": "Now let's see your decision speed!",
+    "start": "Click to start",
+    "wait": "Wait...",
+    "clickNow": "CLICK NOW!",
+    "averageTime": "Average time: {{time}}ms",
+    "lastReaction": "Last reaction: {{time}}ms"
+  },
+  "sortingValues": {
+    "nexo": "This one is very important! Your values guide all your career decisions. Show me what truly matters to you.",
+    "title": "Values Ranking",
+    "description": "Organize your career priorities",
+    "question": "Rank your career values by priority",
+    "actions": {
+      "play": "Start",
+      "reset": "Restart",
+      "confirm": "Confirm"
+    },
+    "instructions": {
+      "order": "Rank from most important to least important:",
+      "reorder": "(Click again to remove and reorder)"
+    },
+    "items": {
+      "stability": "Stability",
+      "creativity": "Creativity",
+      "socialImpact": "Social Impact",
+      "growth": "Growth",
+      "communication": "Communication",
+      "leadership": "Leadership",
+      "organization": "Organization"
+    }
+  },
+  "crossword": {
+    "nexo": "Final mini-game! Solve the crossword using professional world terms!",
+    "title": "Crossword",
+    "description": "Solve the crossword using careers and soft skills terms",
+    "labels": {
+      "solvedWords": "Solved words",
+      "vertical": "Vertical",
+      "horizontal": "Horizontal",
+      "letters": "LETTERS",
+      "lettersCount": "{{count}} letters",
+      "hintsUsed": "Hints used: {{count}} letters",
+      "revealLetter": "Reveal a letter",
+      "hintInfo": "Click the lamp to reveal a letter. Using hints will affect your final ranking.",
+      "loading": "Loading game..."
+    },
+    "words": {
+      "ethic": {
+        "answer": "ETHIC",
+        "clue": "Principle that guides correct choices"
+      },
+      "success": {
+        "answer": "SUCCESS",
+        "clue": "Positive result after overcoming a challenge"
+      },
+      "core": {
+        "answer": "CORE",
+        "clue": "Central part of an idea or project"
+      },
+      "action": {
+        "answer": "ACT",
+        "clue": "Initiative to do something"
+      }
+    }
+  },
+  "results": {
+    "hero": {
+      "badge": "Full Analysis",
+      "titlePrefix": "Your Carr",
+      "titlePrefixWithName": "{{name}}, Your Carr",
+      "titleSuffix": " Profile",
+      "youAre": "You are a"
+    },
+    "traits": {
+      "strategic": "Strategic",
+      "creative": "Creative",
+      "execution": "Execution",
+      "relational": "Relational"
+    },
+    "sections": {
+      "profile": "Profile Overview",
+      "careerMapping": "Career Mapping",
+      "softSkills": "Recommended Soft Skills",
+      "evolution": "Evolution Suggestions",
+      "careers": "Recommended Careers",
+      "education": "Education and Paths",
+      "itemCount": "{{count}} items"
+    },
+    "profileNames": {
+      "strategic": {
+        "1": "Operator",
+        "2": "Planner",
+        "3": "Strategist",
+        "4": "Visionary"
+      },
+      "creative": {
+        "1": "Practical",
+        "2": "Explorer",
+        "3": "Creator",
+        "4": "Disruptive"
+      },
+      "execution": {
+        "1": "Executor",
+        "2": "Organizer",
+        "3": "Achiever",
+        "4": "Builder"
+      },
+      "relational": {
+        "1": "Independent",
+        "2": "Collaborator",
+        "3": "Communicator",
+        "4": "Leader"
+      }
+    },
+    "profileDescriptions": {
+      "strategic": "You have a mindset focused on planning and future vision.",
+      "creative": "You stand out for your ability to create innovative solutions.",
+      "execution": "You are focused on results and excellent delivery.",
+      "relational": "You have a natural ability to connect with and influence people."
+    },
+    "details": {
+      "classificationQuestion": "What is my full classification?",
+      "completeClassification": "Your full classification is:",
+      "technicalCode": "Technical code:",
+      "yourProfile": "Your profile:",
+      "profileMeaning": "What does my profile mean?",
+      "nameGenerated": "How your name was generated:",
+      "nameIntro": "The name",
+      "nameCreated": "was created automatically based on your",
+      "dominantAxes": "2 most dominant axes",
+      "primaryAxis": "Primary axis:",
+      "secondaryAxis": "Secondary axis:",
+      "level": "level",
+      "traitScoresQuestion": "What are my scores in each trait?",
+      "dreamCareerQuestion": "How compatible am I with my dream career?",
+      "compatibilityWith": "compatible with",
+      "compatible": "{{percentage}}% compatible",
+      "salaryRange": "Salary Range",
+      "growth": "Growth",
+      "transitionTime": "Transition Time",
+      "mainSkills": "Main Skills:",
+      "firstJobQuestion": "How long until I get my first job in the field?",
+      "firstJobAnswer": "The average transition time varies according to the chosen career and your current skill level. On average, with dedication and the right development plan, you can get your first opportunity in 6-12 months.",
+      "marketTrendsQuestion": "What are the market trends for these careers?",
+      "marketTrendsAnswer": "The recommended careers show above-average market growth. With accelerated digital transformation, professionals with technology, product, and design skills are in high demand globally.",
+      "softSkillsQuestion": "How can I develop soft skills effectively?",
+      "softSkillsAnswer": "Soft skills are developed through conscious practice and constant feedback. We recommend joining team projects, seeking mentorship, taking personal development courses, and practicing regular self-assessment.",
+      "currentLevel": "Current Level",
+      "goal": "Goal",
+      "developmentTips": "Development tips:",
+      "potentialQuestion": "What is my compatibility potential after developing these skills?",
+      "roadmapQuestion": "What is my development roadmap?",
+      "internationalQuestion": "How does the international experience work?",
+      "internationalAnswer": "International experiences include exchange programs, courses abroad, and global networking to accelerate your career development through unique cultural experiences. You can explore programs in several countries and fields.",
+      "certificationsQuestion": "Which certifications are recommended?",
+      "networkingQuestion": "How can I build international networking?",
+      "networkingAnswer": "Connect with professionals worldwide through events, online communities, mentorship programs, and international experiences. Build a global network of relevant contacts for your career.",
+      "whereStudy": "Where should I study for {{career}}?",
+      "countriesQuestion": "Which countries are recommended for studying?",
+      "scholarshipsQuestion": "Are there scholarships available?",
+      "scholarshipsAnswer": "Yes! There are several scholarship options for international programs. Research government programs, university scholarships, and private foundations to find the best opportunities around the world.",
+      "onlineCoursesQuestion": "Which online courses are recommended?",
+      "recommendedPlatforms": "Recommended platforms:"
+    },
+    "countries": {
+      "usa": "United States",
+      "uk": "United Kingdom",
+      "germany": "Germany",
+      "canada": "Canada",
+      "australia": "Australia",
+      "france": "France"
+    },
+    "roadmap": {
+      "productBasics": "Product Fundamentals",
+      "fourWeeksCompleted": "4 weeks - Completed",
+      "internationalExperience": "International Experience",
+      "eightWeeksInProgress": "8 weeks - In progress",
+      "certifications": "Certifications",
+      "threeWeeksPending": "3 weeks - Pending",
+      "firstJob": "First Job",
+      "ongoingPending": "Ongoing - Pending"
+    },
+    "certifications": {
+      "dataAnalysis": "Data Analysis"
+    },
+    "m60": {
+      "title": "M60 - University of Exchange",
+      "subtitle": "Your partner for global career development",
+      "description": "M60 can help you achieve your dream career through international experiences, study abroad programs, and global networking. Develop your soft skills by experiencing different cultures!",
+      "cta": "Explore M60",
+      "hide": "Hide",
+      "open": "Open M60",
+      "mascotAlt": "M60 Mascot"
+    },
+    "footer": {
+      "founders": "Founders",
+      "productTeam": "Product Team",
+      "mentors": "Mentors",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "quiz": {
+    "progress": "Progress: {{current}} of {{total}}",
+    "complete": "{{percentage}}% complete",
+    "skipDev": "Skip (Dev)",
+    "questionCounter": "{{current}} of {{total}}",
+    "typeLabels": {
+      "choice": "Choice",
+      "scenario": "Scenario",
+      "ranking": "Prioritization",
+      "situation": "Real Situation",
+      "game": "Mini-Game",
+      "slider": "Assessment"
+    },
+    "games": {
+      "play": "Play",
+      "memory": {
+        "title": "Memory Game",
+        "description": "Find the pairs to reveal your focus level",
+        "question": "Let's test your focus and concentration skills!",
+        "aiMessage": "Hi! I'm Nexo, your guide on this self-knowledge journey. Let's start with a quick game so I can understand how you work!",
+        "moves": "Moves: {{count}}",
+        "pairs": "Pairs: {{matched}}/{{total}}"
+      },
+      "choice": {
+        "title": "Quick Choice",
+        "description": "Make choices to reveal your preferences"
+      }
+    }
+  },
+  "faq": {
+    "navHome": "Home",
+    "navFaq": "FAQ",
+    "navBlog": "Blog",
+    "subtitle": "Find answers to the most frequently asked questions about CarrIA",
+    "searchPlaceholder": "Search questions...",
+    "questions": "Questions",
+    "resultsFor": "Results for \"{{query}}\"",
+    "noResults": "No questions found. Try another search.",
+    "backHome": "Back to Home",
+    "categories": {
+      "general": "General",
+      "features": "Platform Features",
+      "technical": "Technical Support"
+    }
+  }
+}

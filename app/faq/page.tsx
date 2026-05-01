@@ -3,11 +3,13 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useTranslation } from "react-i18next"
 import { ChevronDown, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { AccessibilityToolbar } from "@/components/accessibility-toolbar"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import { ArrowLeft } from "lucide-react"
 
 // FAQ Data organized by categories and subcategories
@@ -271,6 +273,7 @@ const faqData = {
 type CategoryKey = keyof typeof faqData
 
 export default function FAQPage() {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState<CategoryKey>("geral")
   const [activeSubcategory, setActiveSubcategory] = useState("sobre-plataforma")
   const [openQuestion, setOpenQuestion] = useState<string | null>(null)
@@ -305,7 +308,7 @@ export default function FAQPage() {
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/logo.png"
-                alt="CarrIA Logo"
+                alt={t("brand.logoAlt")}
                 width={48}
                 height={48}
                 className="w-12 h-12 object-contain"
@@ -320,23 +323,26 @@ export default function FAQPage() {
                 href="/"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                Inicio
+                {t("faq.navHome")}
               </Link>
               <Link
                 href="/faq"
                 className="text-sm font-medium text-foreground"
               >
-                FAQ
+                {t("faq.navFaq")}
               </Link>
               <Link
                 href="#"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                Blog
+                {t("faq.navBlog")}
               </Link>
             </nav>
 
-            <AccessibilityToolbar />
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <AccessibilityToolbar />
+            </div>
           </div>
         </div>
       </header>
@@ -348,7 +354,7 @@ export default function FAQPage() {
             FAQ
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Encontre respostas para as perguntas mais frequentes sobre a CarrIA
+            {t("faq.subtitle")}
           </p>
           
           {/* Search Bar */}
@@ -356,7 +362,7 @@ export default function FAQPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Buscar perguntas..."
+              placeholder={t("faq.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 pr-4 py-6 text-base rounded-xl border-border bg-card"
@@ -385,7 +391,13 @@ export default function FAQPage() {
                     : "hover:bg-secondary"
                 )}
               >
-                {category.label}
+                {t(
+                  key === "geral"
+                    ? "faq.categories.general"
+                    : key === "recursos"
+                      ? "faq.categories.features"
+                      : "faq.categories.technical"
+                )}
               </Button>
             ))}
           </div>
@@ -416,7 +428,7 @@ export default function FAQPage() {
                     {subcategory.title}
                   </h3>
                   <p className="text-sm mt-1">
-                    {subcategory.questionCount.toString().padStart(2, "0")} Perguntas
+                    {subcategory.questionCount.toString().padStart(2, "0")} {t("faq.questions")}
                   </p>
                 </button>
               ))}
@@ -427,7 +439,7 @@ export default function FAQPage() {
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-foreground">
                   {searchQuery
-                    ? `Resultados para "${searchQuery}"`
+                    ? t("faq.resultsFor", { query: searchQuery })
                     : currentSubcategory?.title}
                 </h2>
               </div>
@@ -435,7 +447,7 @@ export default function FAQPage() {
               {filteredQuestions.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
-                    Nenhuma pergunta encontrada. Tente outra busca.
+                    {t("faq.noResults")}
                   </p>
                 </div>
               ) : (
@@ -480,12 +492,12 @@ export default function FAQPage() {
       {/* Back to Home */}
       <section className="py-12 border-t border-border">
         <div className="container mx-auto px-4 text-center">
-          <Link href="/">
-            <Button variant="outline" className="rounded-xl gap-2">
+          <Button asChild variant="outline" className="rounded-xl gap-2">
+            <Link href="/">
               <ArrowLeft className="h-4 w-4" />
-              Voltar para o Inicio
-            </Button>
-          </Link>
+              {t("faq.backHome")}
+            </Link>
+          </Button>
         </div>
       </section>
     </div>

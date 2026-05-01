@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -14,6 +15,7 @@ interface MiniGameProps {
 
 // Memory Game - revela preferencias de foco e atencao
 function MemoryGame({ onComplete }: { onComplete: (score: number, trait: string) => void }) {
+  const { t } = useTranslation()
   // Profession-related symbols
   const symbols = ["medico", "programador", "engenheiro", "artista", "advogado", "empresario", "professor", "comunicador"]
   const [cards, setCards] = useState<{ id: number; symbol: string; flipped: boolean; matched: boolean }[]>([])
@@ -85,8 +87,8 @@ function MemoryGame({ onComplete }: { onComplete: (score: number, trait: string)
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center text-sm">
-        <span className="text-muted-foreground">Movimentos: {moves}</span>
-        <span className="text-primary font-medium">Pares: {matched}/{totalPairs}</span>
+        <span className="text-muted-foreground">{t("quiz.games.memory.moves", { count: moves })}</span>
+        <span className="text-primary font-medium">{t("quiz.games.memory.pairs", { matched, total: totalPairs })}</span>
       </div>
       <div className="grid grid-cols-4 gap-2">
         {cards.map((card) => (
@@ -111,6 +113,7 @@ function MemoryGame({ onComplete }: { onComplete: (score: number, trait: string)
 
 // Reaction Game - mede velocidade de decisao
 function ReactionGame({ onComplete }: { onComplete: (score: number, trait: string) => void }) {
+  const { t } = useTranslation()
   const [state, setState] = useState<"waiting" | "ready" | "go" | "done">("waiting")
   const [startTime, setStartTime] = useState(0)
   const [reactionTime, setReactionTime] = useState(0)
@@ -177,31 +180,31 @@ function ReactionGame({ onComplete }: { onComplete: (score: number, trait: strin
         {state === "waiting" && (
           <>
             <Zap className="w-8 h-8 mb-2" />
-            <span>Clique para iniciar</span>
+            <span>{t("reactionTest.start")}</span>
           </>
         )}
         {state === "ready" && (
           <>
             <Target className="w-8 h-8 mb-2 animate-pulse" />
-            <span>Aguarde...</span>
+            <span>{t("reactionTest.wait")}</span>
           </>
         )}
         {state === "go" && (
           <>
             <Trophy className="w-8 h-8 mb-2" />
-            <span>CLIQUE AGORA!</span>
+            <span>{t("reactionTest.clickNow")}</span>
           </>
         )}
         {state === "done" && (
           <>
             <Star className="w-8 h-8 mb-2" />
-                <span>Tempo médio: {Math.floor(attempts.reduce((a, b) => a + b, 0) / attempts.length)}ms</span>
+                <span>{t("reactionTest.averageTime", { time: Math.floor(attempts.reduce((a, b) => a + b, 0) / attempts.length) })}</span>
           </>
         )}
       </motion.button>
 
       {reactionTime > 0 && state !== "done" && (
-        <p className="text-sm text-muted-foreground">Última reação: {reactionTime}ms</p>
+        <p className="text-sm text-muted-foreground">{t("reactionTest.lastReaction", { time: reactionTime })}</p>
       )}
     </div>
   )
@@ -209,18 +212,19 @@ function ReactionGame({ onComplete }: { onComplete: (score: number, trait: strin
 
 // Sorting Game - revela prioridades e valores (now with reordering)
 function SortingGame({ onComplete, question }: { onComplete: (score: number, trait: string) => void, question: string }) {
+  const { t } = useTranslation()
   const isSkillsGame = question.toLowerCase().includes("habilidades")
   
   const valuesOptions = isSkillsGame ? [
-    { id: 1, label: "Comunicação", icon: Target, trait: "relational" },
-    { id: 2, label: "Liderança", icon: Star, trait: "strategic" },
-    { id: 3, label: "Criatividade", icon: Heart, trait: "creative" },
-    { id: 4, label: "Organização", icon: Zap, trait: "execution" },
+    { id: 1, label: t("sortingValues.items.communication"), icon: Target, trait: "relational" },
+    { id: 2, label: t("sortingValues.items.leadership"), icon: Star, trait: "strategic" },
+    { id: 3, label: t("sortingValues.items.creativity"), icon: Heart, trait: "creative" },
+    { id: 4, label: t("sortingValues.items.organization"), icon: Zap, trait: "execution" },
   ] : [
-    { id: 1, label: "Estabilidade", icon: Target, trait: "execution" },
-    { id: 2, label: "Criatividade", icon: Star, trait: "creative" },
-    { id: 3, label: "Impacto Social", icon: Heart, trait: "relational" },
-    { id: 4, label: "Crescimento", icon: Zap, trait: "strategic" },
+    { id: 1, label: t("sortingValues.items.stability"), icon: Target, trait: "execution" },
+    { id: 2, label: t("sortingValues.items.creativity"), icon: Star, trait: "creative" },
+    { id: 3, label: t("sortingValues.items.socialImpact"), icon: Heart, trait: "relational" },
+    { id: 4, label: t("sortingValues.items.growth"), icon: Zap, trait: "strategic" },
   ]
 
   const [ranking, setRanking] = useState<number[]>([])
@@ -252,10 +256,10 @@ function SortingGame({ onComplete, question }: { onComplete: (score: number, tra
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground text-center mb-2">
-        Ordene do mais importante para o menos importante:
+        {t("sortingValues.instructions.order")}
       </p>
       <p className="text-xs text-muted-foreground text-center mb-4">
-        (Clique novamente para remover e reordenar)
+        {t("sortingValues.instructions.reorder")}
       </p>
 
       <div className="space-y-2">
@@ -298,14 +302,14 @@ function SortingGame({ onComplete, question }: { onComplete: (score: number, tra
             onClick={handleReset}
             className="flex-1"
           >
-            Recomeçar
+            {t("sortingValues.actions.reset")}
           </Button>
           <Button
             onClick={handleConfirm}
             disabled={ranking.length !== 4}
             className="flex-1"
           >
-            Confirmar
+            {t("sortingValues.actions.confirm")}
           </Button>
         </div>
       )}
@@ -324,25 +328,34 @@ function normalizeText(text: string): string {
 
 // Crossword Game - resolver palavras cruzadas relacionadas a carreiras e soft skills
 function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: string) => void }) {
+  const { t, i18n } = useTranslation()
+  const currentLanguage = i18n.resolvedLanguage || i18n.language
+  const isEnglish = currentLanguage.startsWith("en")
+  const isSpanish = currentLanguage.startsWith("es")
+
   // Crossword puzzles with 4 words that properly intersect
   // Each puzzle has words that share letters at intersection points
   const puzzleSets = [
     {
-      // ETICA vertical + VITORIA, NUCLEO, ACAO horizontal intersecting
+      // Positions adapt by language so intersections remain valid for translated answers.
       words: [
-        { answer: "ÉTICA", clue: "Princípio que orienta escolhas corretas", direction: "vertical" as const, row: 0, col: 2 },
-        { answer: "VITÓRIA", clue: "Resultado positivo após superar um desafio", direction: "horizontal" as const, row: 1, col: 0 },
-        { answer: "NÚCLEO", clue: "Parte central de uma ideia ou projeto", direction: "horizontal" as const, row: 3, col: 0 },
-        { answer: "AÇÃO", clue: "Iniciativa para realizar algo", direction: "horizontal" as const, row: 4, col: 0 },
+        { answer: t("crossword.words.ethic.answer"), clue: t("crossword.words.ethic.clue"), direction: "vertical" as const, row: 0, col: 4 },
+        { answer: t("crossword.words.success.answer"), clue: t("crossword.words.success.clue"), direction: "horizontal" as const, row: isEnglish ? 0 : isSpanish ? 2 : 3, col: isEnglish ? 0 : 2 },
+        { answer: t("crossword.words.core.answer"), clue: t("crossword.words.core.clue"), direction: "horizontal" as const, row: isEnglish ? 4 : isSpanish ? 3 : 0, col: isEnglish ? 4 : isSpanish ? 2 : 0 },
+        { answer: t("crossword.words.action.answer"), clue: t("crossword.words.action.clue"), direction: "horizontal" as const, row: isEnglish ? 1 : 4, col: isEnglish ? 2 : 4 },
       ]
     },
   ]
   
-  // Select random puzzle set on mount
-  const [puzzleIndex] = useState(() => Math.floor(Math.random() * puzzleSets.length))
+  const [puzzleIndex, setPuzzleIndex] = useState(0)
+
+  useEffect(() => {
+    setPuzzleIndex(Math.floor(Math.random() * puzzleSets.length))
+  }, [puzzleSets.length])
+
   const selectedPuzzle = puzzleSets[puzzleIndex] || puzzleSets[0]
   if (!selectedPuzzle || !selectedPuzzle.words) {
-    return <div>Carregando jogo...</div>
+    return <div>{t("crossword.labels.loading")}</div>
   }
   
   // Build crossword data with proper positioning
@@ -366,6 +379,13 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
   const [selectedClue, setSelectedClue] = useState<number | null>(null)
   const [solvedClues, setSolvedClues] = useState<number[]>([])
   const [hintsUsed, setHintsUsed] = useState(0)
+
+  useEffect(() => {
+    setUserAnswers({})
+    setSelectedClue(null)
+    setSolvedClues([])
+    setHintsUsed(0)
+  }, [currentLanguage])
 
   const getCellClues = (row: number, col: number) => {
     return crosswordData
@@ -474,7 +494,7 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center text-sm">
-        <span className="text-muted-foreground">Palavras resolvidas:</span>
+        <span className="text-muted-foreground">{t("crossword.labels.solvedWords")}:</span>
         <span className="text-primary font-medium">{solvedClues.length}/{crosswordData.length}</span>
       </div>
       
@@ -482,7 +502,7 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
         <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/20 border border-amber-500/50">
           <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
           <span className="text-xs text-amber-600 dark:text-amber-400">
-            Dicas usadas: {hintsUsed} letras
+            {t("crossword.labels.hintsUsed", { count: hintsUsed })}
           </span>
         </div>
       )}
@@ -539,7 +559,7 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
                 {clue.number}
               </span>
               <span className="text-xs text-muted-foreground">
-                {clue.direction === "horizontal" ? "Horizontal" : "Vertical"}
+                {clue.direction === "horizontal" ? t("crossword.labels.horizontal") : t("crossword.labels.vertical")}
               </span>
               {solvedClues.includes(clue.number) && (
                 <Trophy className="w-4 h-4 text-primary ml-auto" />
@@ -553,7 +573,7 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
                   maxLength={clue.answer.length}
                   value={userAnswers[clue.number] || ""}
                   onChange={(e) => handleInputChange(clue.number, e.target.value)}
-                  placeholder={`${clue.answer.length} letras`}
+                  placeholder={t("crossword.labels.lettersCount", { count: clue.answer.length })}
                   className="flex-1 px-3 py-2 text-sm rounded-lg bg-background border border-border focus:border-primary focus:outline-none uppercase tracking-widest font-mono"
                 />
                 <Button
@@ -564,7 +584,7 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
                     handleUseHint(clue.number)
                   }}
                   className="shrink-0 text-amber-600 border-amber-500/50 hover:bg-amber-500/20"
-                  title="Revelar uma letra"
+                  title={t("crossword.labels.revealLetter")}
                 >
                   <Lightbulb className="w-4 h-4" />
                 </Button>
@@ -581,39 +601,40 @@ function CrosswordGame({ onComplete }: { onComplete: (score: number, trait: stri
       
       {/* Hint info */}
       <p className="text-xs text-muted-foreground text-center">
-        Clique na lampada para revelar uma letra. O uso de dicas sera considerado no ranking final.
+        {t("crossword.labels.hintInfo")}
       </p>
     </div>
   )
 }
 
 export function MiniGame({ type, onComplete, question }: MiniGameProps) {
+  const { t } = useTranslation()
   const [showIntro, setShowIntro] = useState(true)
 
 const gameInfo = {
     memory: {
-      title: "Jogo da Memoria",
-      description: "Encontre os pares para revelar seu nivel de foco",
+      title: t("quiz.games.memory.title"),
+      description: t("quiz.games.memory.description"),
       icon: Gamepad2,
     },
     reaction: {
-      title: "Teste de Reacao",
-      description: "Clique rapido quando a tela ficar verde",
+      title: t("reactionTest.title"),
+      description: t("reactionTest.instruction"),
       icon: Zap,
     },
     choice: {
-      title: "Escolha Rapida",
-      description: "Faca escolhas para revelar suas preferencias",
+      title: t("quiz.games.choice.title"),
+      description: t("quiz.games.choice.description"),
       icon: Target,
     },
     sorting: {
-      title: "Ordenacao de Valores",
-      description: "Organize suas prioridades de carreira",
+      title: t("sortingValues.title"),
+      description: t("sortingValues.description"),
       icon: Trophy,
     },
     crossword: {
-      title: "Palavras Cruzadas",
-      description: "Resolva as palavras cruzadas sobre carreiras e soft skills",
+      title: t("crossword.title"),
+      description: t("crossword.description"),
       icon: Search,
     },
   }
@@ -639,7 +660,7 @@ const gameInfo = {
             <p className="text-muted-foreground">{info.description}</p>
             <p className="text-sm text-foreground/80 italic">{question}</p>
             <Button onClick={() => setShowIntro(false)} className="mt-4">
-              Jogar
+              {type === "sorting" ? t("sortingValues.actions.play") : t("quiz.games.play")}
             </Button>
           </motion.div>
         ) : (

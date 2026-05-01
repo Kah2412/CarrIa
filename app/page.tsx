@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { Header } from "@/components/career/header"
 import { WelcomeScreen, type UserData } from "@/components/career/welcome-screen"
 import { QuizCard } from "@/components/career/quiz-card"
@@ -546,6 +547,7 @@ const initialAchievements = [
 ]
 
 export default function CarrIAPage() {
+  const { t } = useTranslation()
   const [gameState, setGameState] = useState<"welcome" | "quiz" | "results">("welcome")
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [xp, setXp] = useState(0)
@@ -833,8 +835,8 @@ const generateFeedback = useCallback((trait: string, isGame: boolean = false) =>
             {/* Progress indicator */}
             <div className="w-full max-w-2xl mb-6">
               <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-                <span>Progresso: {currentQuestion + 1} de {questions.length}</span>
-                <span>{completionPercentage}% completo</span>
+                <span>{t("quiz.progress", { current: currentQuestion + 1, total: questions.length })}</span>
+                <span>{t("quiz.complete", { percentage: completionPercentage })}</span>
               </div>
             </div>
             
@@ -846,7 +848,7 @@ const generateFeedback = useCallback((trait: string, isGame: boolean = false) =>
               onAnswer={handleAnswer}
               xpReward={currentQ.xpReward}
               questionType={currentQ.questionType}
-              scenario={currentQ.scenario}
+              scenario={"scenario" in currentQ ? currentQ.scenario as { title: string; context: string } : undefined}
               gameType={currentQ.gameType}
               aiMessage={currentQ.aiMessage}
               aiEmotion={currentQ.aiEmotion}
@@ -879,7 +881,7 @@ const generateFeedback = useCallback((trait: string, isGame: boolean = false) =>
               }}
               className="fixed bottom-4 right-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-lg z-50 transition-colors"
             >
-              SKIP (Dev)
+              {t("quiz.skipDev")}
             </button>
           </div>
         )}

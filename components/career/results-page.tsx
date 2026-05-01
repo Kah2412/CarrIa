@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useTranslation } from "react-i18next"
 import { ChevronDown, ChevronRight, User, Map, Lightbulb, TrendingUp, Briefcase, GraduationCap, Star, Users, Building, History, Mail, Phone, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -68,24 +69,84 @@ type SectionId = "profile" | "career-mapping" | "soft-skills" | "evolution" | "c
 
 interface Section {
   id: SectionId
-  title: string
+  titleKey: string
   icon: React.ReactNode
   questionCount: number
 }
 
 const sections: Section[] = [
-  { id: "profile", title: "Visão Geral do Perfil", icon: <User className="w-5 h-5" />, questionCount: 4 },
-  { id: "career-mapping", title: "Mapeamento de Carreira", icon: <Map className="w-5 h-5" />, questionCount: 6 },
-  { id: "soft-skills", title: "Soft Skills Recomendadas", icon: <Lightbulb className="w-5 h-5" />, questionCount: 5 },
-  { id: "evolution", title: "Sugestões de Evolução", icon: <TrendingUp className="w-5 h-5" />, questionCount: 4 },
-  { id: "careers", title: "Carreiras Indicadas", icon: <Briefcase className="w-5 h-5" />, questionCount: 3 },
-  { id: "education", title: "Educação e Caminhos", icon: <GraduationCap className="w-5 h-5" />, questionCount: 8 },
+  { id: "profile", titleKey: "results.sections.profile", icon: <User className="w-5 h-5" />, questionCount: 4 },
+  { id: "career-mapping", titleKey: "results.sections.careerMapping", icon: <Map className="w-5 h-5" />, questionCount: 6 },
+  { id: "soft-skills", titleKey: "results.sections.softSkills", icon: <Lightbulb className="w-5 h-5" />, questionCount: 5 },
+  { id: "evolution", titleKey: "results.sections.evolution", icon: <TrendingUp className="w-5 h-5" />, questionCount: 4 },
+  { id: "careers", titleKey: "results.sections.careers", icon: <Briefcase className="w-5 h-5" />, questionCount: 3 },
+  { id: "education", titleKey: "results.sections.education", icon: <GraduationCap className="w-5 h-5" />, questionCount: 8 },
 ]
 
+const careerTranslationKeys: Record<string, string> = {
+  graphic_designer: "welcome.careers.graphicDesigner",
+  software_engineer: "welcome.careers.softwareEngineer",
+  data_scientist: "welcome.careers.dataScientist",
+  doctor: "welcome.careers.doctor",
+  psychologist: "welcome.careers.psychologist",
+  innovation_consultant: "welcome.careers.innovationConsultant",
+  architect: "welcome.careers.architect",
+  entrepreneur: "welcome.careers.entrepreneur",
+  teacher: "welcome.careers.teacher",
+  game_developer: "welcome.careers.gameDeveloper",
+  advertising_professional: "welcome.careers.advertisingProfessional",
+  product_manager: "welcome.careers.productManager",
+  data_analyst: "welcome.careers.dataAnalyst",
+  lawyer: "welcome.careers.lawyer",
+  civil_engineer: "welcome.careers.civilEngineer",
+  mechanical_engineer: "welcome.careers.mechanicalEngineer",
+  interior_designer: "welcome.careers.interiorDesigner",
+  ux_ui_designer: "welcome.careers.uxUiDesigner",
+  scientist: "welcome.careers.scientist",
+  researcher: "welcome.careers.researcher",
+  digital_marketing: "welcome.careers.digitalMarketing",
+  journalist: "welcome.careers.journalist",
+  digital_influencer: "welcome.careers.digitalInfluencer",
+  nurse: "welcome.careers.nurse",
+  physiotherapist: "welcome.careers.physiotherapist",
+  nutritionist: "welcome.careers.nutritionist",
+  veterinarian: "welcome.careers.veterinarian",
+  economist: "welcome.careers.economist",
+  accountant: "welcome.careers.accountant",
+  administrator: "welcome.careers.administrator",
+  human_resources: "welcome.careers.humanResources",
+  other: "welcome.careers.other",
+}
+
 export function ResultsPage({ userData, classification, careerSuggestions, softSkillsData }: ResultsPageProps) {
+  const { t } = useTranslation()
   const [activeSection, setActiveSection] = useState<SectionId>("profile")
   // Initialize with all profile items expanded by default
   const [openItems, setOpenItems] = useState<string[]>(["classification", "profile-title", "trait-scores", "dream-career"])
+  const dreamCareerMatch = useMemo(() => {
+    const source = `${classification.code}-${userData?.dreamCareer || ""}`
+    const hash = Array.from(source).reduce((total, char) => total + char.charCodeAt(0), 0)
+    return 65 + (hash % 25)
+  }, [classification.code, userData?.dreamCareer])
+  const dreamCareerLabel = userData?.dreamCareer
+    ? t(careerTranslationKeys[userData.dreamCareer] || userData.dreamCareer)
+    : ""
+  const traitLabel = (trait?: string) => {
+    if (trait === "strategic") return t("results.traits.strategic")
+    if (trait === "creative") return t("results.traits.creative")
+    if (trait === "execution") return t("results.traits.execution")
+    return t("results.traits.relational")
+  }
+  const axisName = (axis?: string, level?: number) => {
+    const axisKey = axis === "strategic" || axis === "creative" || axis === "execution" || axis === "relational" ? axis : "strategic"
+    return t(`results.profileNames.${axisKey}.${level || 1}`, { defaultValue: "" })
+  }
+  const translatedProfileTitle = classification.primary && classification.secondary
+    ? `${axisName(classification.primary, classification.primaryLevel)} ${axisName(classification.secondary, classification.secondaryLevel)}`
+    : classification.title
+  const translatedProfileDescription = classification.primary
+    ? t(`results.profileDescriptions.${classification.primary}`, { defaultValue: classification.description })
+    : classification.description
 
   const toggleItem = (itemId: string) => {
     setOpenItems(prev => 
@@ -106,39 +167,39 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("classification")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Qual é minha classificação completa?</span>
+                <span className="font-medium text-foreground">{t("results.details.classificationQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("classification") && "rotate-180")} />
               </button>
               {openItems.includes("classification") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground mb-4">Sua classificação completa é:</p>
+                    <p className="text-muted-foreground mb-4">{t("results.details.completeClassification")}</p>
                     <div className="flex flex-wrap gap-3 mb-4">
                       <div className="px-4 py-3 rounded-xl bg-blue-500/10 border border-blue-500/30">
                         <span className="text-xl font-bold text-blue-600 dark:text-blue-400">S{classification.levels?.S || 1}</span>
-                        <p className="text-xs text-muted-foreground mt-1">Estratégico</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("results.traits.strategic")}</p>
                       </div>
                       <div className="px-4 py-3 rounded-xl bg-purple-500/10 border border-purple-500/30">
                         <span className="text-xl font-bold text-purple-600 dark:text-purple-400">C{classification.levels?.C || 1}</span>
-                        <p className="text-xs text-muted-foreground mt-1">Criativo</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("results.traits.creative")}</p>
                       </div>
                       <div className="px-4 py-3 rounded-xl bg-green-500/10 border border-green-500/30">
                         <span className="text-xl font-bold text-green-600 dark:text-green-400">E{classification.levels?.E || 1}</span>
-                        <p className="text-xs text-muted-foreground mt-1">Execução</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("results.traits.execution")}</p>
                       </div>
                       <div className="px-4 py-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
                         <span className="text-xl font-bold text-orange-600 dark:text-orange-400">R{classification.levels?.R || 1}</span>
-                        <p className="text-xs text-muted-foreground mt-1">Relacional</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("results.traits.relational")}</p>
                       </div>
                     </div>
                     <div className="space-y-3">
                       <div className="inline-flex items-center gap-3 px-4 py-3 rounded-xl bg-secondary/50 border border-border">
-                        <span className="text-sm text-muted-foreground">Código técnico:</span>
+                        <span className="text-sm text-muted-foreground">{t("results.details.technicalCode")}</span>
                         <span className="text-lg font-bold text-foreground font-mono">{classification.code}</span>
                       </div>
                       <div className="inline-flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 border border-primary/30">
-                        <span className="text-sm text-muted-foreground">Seu perfil:</span>
-                        <span className="text-lg font-bold text-primary">{classification.title}</span>
+                        <span className="text-sm text-muted-foreground">{t("results.details.yourProfile")}</span>
+                        <span className="text-lg font-bold text-primary">{translatedProfileTitle}</span>
                       </div>
                     </div>
                   </div>
@@ -152,33 +213,33 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("profile-title")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">O que significa o meu perfil?</span>
+                <span className="font-medium text-foreground">{t("results.details.profileMeaning")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("profile-title") && "rotate-180")} />
               </button>
               {openItems.includes("profile-title") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4 space-y-4">
                     <div>
-                      <h4 className="text-2xl font-bold text-primary mb-2">{classification.title}</h4>
-                      <p className="text-muted-foreground">{classification.description}</p>
+                      <h4 className="text-2xl font-bold text-primary mb-2">{translatedProfileTitle}</h4>
+                      <p className="text-muted-foreground">{translatedProfileDescription}</p>
                     </div>
                     <div className="bg-secondary/50 rounded-lg p-4">
-                      <p className="text-sm text-muted-foreground mb-2">Como seu nome foi gerado:</p>
+                      <p className="text-sm text-muted-foreground mb-2">{t("results.details.nameGenerated")}</p>
                       <p className="text-sm text-foreground">
-                        O nome <span className="font-semibold text-primary">{classification.title}</span> foi criado 
-                        automaticamente com base nos seus <span className="font-medium">2 eixos mais dominantes</span>:
+                        {t("results.details.nameIntro")} <span className="font-semibold text-primary">{translatedProfileTitle}</span> {t("results.details.nameCreated")} 
+                        <span className="font-medium">{t("results.details.dominantAxes")}</span>:
                       </p>
                       <ul className="mt-2 space-y-1 text-sm">
                         <li className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-primary" />
                           <span className="text-foreground">
-                            <span className="font-medium">Eixo principal:</span> {classification.primary === "strategic" ? "Estratégico" : classification.primary === "creative" ? "Criativo" : classification.primary === "execution" ? "Execução" : "Relacional"} (nível {classification.primaryLevel})
+                            <span className="font-medium">{t("results.details.primaryAxis")}</span> {traitLabel(classification.primary)} ({t("results.details.level")} {classification.primaryLevel})
                           </span>
                         </li>
                         <li className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-muted-foreground" />
                           <span className="text-foreground">
-                            <span className="font-medium">Eixo secundário:</span> {classification.secondary === "strategic" ? "Estratégico" : classification.secondary === "creative" ? "Criativo" : classification.secondary === "execution" ? "Execução" : "Relacional"} (nível {classification.secondaryLevel})
+                            <span className="font-medium">{t("results.details.secondaryAxis")}</span> {traitLabel(classification.secondary)} ({t("results.details.level")} {classification.secondaryLevel})
                           </span>
                         </li>
                       </ul>
@@ -194,7 +255,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("trait-scores")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quais sao minhas pontuacoes em cada traco?</span>
+                <span className="font-medium text-foreground">{t("results.details.traitScoresQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("trait-scores") && "rotate-180")} />
               </button>
               {openItems.includes("trait-scores") && (
@@ -203,7 +264,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                     {Object.entries(classification.traitScores).map(([trait, score]) => (
                       <div key={trait}>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="capitalize text-foreground">{trait === "strategic" ? "Estratégico" : trait === "creative" ? "Criativo" : trait === "execution" ? "Execução" : "Relacional"}</span>
+                          <span className="capitalize text-foreground">{traitLabel(trait)}</span>
                           <span className="text-muted-foreground">{score}%</span>
                         </div>
                         <div className="h-2 bg-secondary rounded-full overflow-hidden">
@@ -231,17 +292,17 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                   onClick={() => toggleItem("dream-career")}
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
                 >
-                  <span className="font-medium text-foreground">Qual a compatibilidade com minha carreira dos sonhos?</span>
+                  <span className="font-medium text-foreground">{t("results.details.dreamCareerQuestion")}</span>
                   <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("dream-career") && "rotate-180")} />
                 </button>
                 {openItems.includes("dream-career") && (
                   <div className="px-5 pb-5 border-t border-border">
                     <div className="pt-4">
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="text-3xl font-bold text-primary">{Math.floor(Math.random() * 25 + 65)}%</div>
+                        <div className="text-3xl font-bold text-primary">{dreamCareerMatch}%</div>
                         <div>
-                          <p className="text-sm text-muted-foreground">de compatibilidade com</p>
-                          <p className="font-semibold text-foreground">{userData.dreamCareer}</p>
+                          <p className="text-sm text-muted-foreground">{t("results.details.compatibilityWith")}</p>
+                          <p className="font-semibold text-foreground">{dreamCareerLabel}</p>
                         </div>
                       </div>
                     </div>
@@ -265,7 +326,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                     <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
                       {index + 1}
                     </span>
-                    <span className="font-medium text-foreground">{career.title} - {career.matchPercentage}% compativel</span>
+                    <span className="font-medium text-foreground">{career.title} - {t("results.details.compatible", { percentage: career.matchPercentage })}</span>
                   </div>
                   <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes(`career-${career.id}`) && "rotate-180")} />
                 </button>
@@ -275,20 +336,20 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                       <p className="text-muted-foreground">{career.description}</p>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-muted-foreground">Faixa Salarial</p>
+                          <p className="text-muted-foreground">{t("results.details.salaryRange")}</p>
                           <p className="font-semibold text-foreground">{career.salaryRange}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Crescimento</p>
+                          <p className="text-muted-foreground">{t("results.details.growth")}</p>
                           <p className="font-semibold text-green-600">{career.growthRate}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Tempo de Transição</p>
+                          <p className="text-muted-foreground">{t("results.details.transitionTime")}</p>
                           <p className="font-semibold text-foreground">{career.timeToTransition}</p>
                         </div>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground mb-2">Habilidades Principais:</p>
+                        <p className="text-sm text-muted-foreground mb-2">{t("results.details.mainSkills")}</p>
                         <div className="flex flex-wrap gap-2">
                           {career.topSkills.map(skill => (
                             <span key={skill} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
@@ -309,17 +370,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("time-job")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quanto tempo para conseguir meu primeiro emprego na area?</span>
+                <span className="font-medium text-foreground">{t("results.details.firstJobQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("time-job") && "rotate-180")} />
               </button>
               {openItems.includes("time-job") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      O tempo médio de transição varia de acordo com a carreira escolhida e seu nível atual de habilidades. 
-                      Em media, com dedicacao e o plano de desenvolvimento correto, voce pode conseguir sua primeira oportunidade 
-                      em 6-12 meses.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.firstJobAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -331,17 +388,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("market-trends")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quais as tendencias de mercado para essas carreiras?</span>
+                <span className="font-medium text-foreground">{t("results.details.marketTrendsQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("market-trends") && "rotate-180")} />
               </button>
               {openItems.includes("market-trends") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      As carreiras recomendadas apresentam crescimento acima da media do mercado. 
-                      Com a transformacao digital acelerada, profissionais com habilidades em tecnologia, 
-                      produto e design estao em alta demanda globalmente.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.marketTrendsAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -373,15 +426,15 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                     <div className="pt-4 space-y-4">
                       <div>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-muted-foreground">Nivel Atual: {skill.currentLevel}%</span>
-                          <span className="text-muted-foreground">Meta: {skill.targetLevel}%</span>
+                          <span className="text-muted-foreground">{t("results.details.currentLevel")}: {skill.currentLevel}%</span>
+                          <span className="text-muted-foreground">{t("results.details.goal")}: {skill.targetLevel}%</span>
                         </div>
                         <div className="h-2 bg-secondary rounded-full overflow-hidden">
                           <div className="h-full bg-primary rounded-full" style={{ width: `${skill.currentLevel}%` }} />
                         </div>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-foreground mb-2">Dicas para desenvolver:</p>
+                        <p className="text-sm font-medium text-foreground mb-2">{t("results.details.developmentTips")}</p>
                         <ul className="space-y-1">
                           {skill.tips.map((tip, i) => (
                             <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
@@ -403,17 +456,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("general-skills")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Como desenvolver soft skills de forma eficaz?</span>
+                <span className="font-medium text-foreground">{t("results.details.softSkillsQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("general-skills") && "rotate-180")} />
               </button>
               {openItems.includes("general-skills") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      Soft skills são desenvolvidas através de prática consciente e feedback constante. 
-                      Recomendamos participar de projetos em equipe, buscar mentorias, fazer cursos de desenvolvimento 
-                      pessoal e praticar autoavaliacao regularmente.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.softSkillsAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -425,7 +474,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("match-potential")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Qual meu potencial de compatibilidade apos desenvolver as skills?</span>
+                <span className="font-medium text-foreground">{t("results.details.potentialQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("match-potential") && "rotate-180")} />
               </button>
               {openItems.includes("match-potential") && (
@@ -457,7 +506,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("roadmap")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Qual o meu roadmap de desenvolvimento?</span>
+                <span className="font-medium text-foreground">{t("results.details.roadmapQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("roadmap") && "rotate-180")} />
               </button>
               {openItems.includes("roadmap") && (
@@ -467,29 +516,29 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/30">
                         <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-sm">1</div>
                         <div>
-                          <p className="font-medium text-foreground">Fundamentos de Produto</p>
-                          <p className="text-sm text-muted-foreground">4 semanas - Concluido</p>
+                          <p className="font-medium text-foreground">{t("results.roadmap.productBasics")}</p>
+                          <p className="text-sm text-muted-foreground">{t("results.roadmap.fourWeeksCompleted")}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/10 border border-primary/30">
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm">2</div>
                         <div>
-                          <p className="font-medium text-foreground">Experiencia Internacional</p>
-                          <p className="text-sm text-muted-foreground">8 semanas - Em andamento</p>
+                          <p className="font-medium text-foreground">{t("results.roadmap.internationalExperience")}</p>
+                          <p className="text-sm text-muted-foreground">{t("results.roadmap.eightWeeksInProgress")}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary border border-border">
                         <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm">3</div>
                         <div>
-                          <p className="font-medium text-foreground">Certificações</p>
-                          <p className="text-sm text-muted-foreground">3 semanas - Pendente</p>
+                          <p className="font-medium text-foreground">{t("results.roadmap.certifications")}</p>
+                          <p className="text-sm text-muted-foreground">{t("results.roadmap.threeWeeksPending")}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary border border-border">
                         <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm">4</div>
                         <div>
-                          <p className="font-medium text-foreground">Primeiro Emprego</p>
-                          <p className="text-sm text-muted-foreground">Continuo - Pendente</p>
+                          <p className="font-medium text-foreground">{t("results.roadmap.firstJob")}</p>
+                          <p className="text-sm text-muted-foreground">{t("results.roadmap.ongoingPending")}</p>
                         </div>
                       </div>
                     </div>
@@ -503,17 +552,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("international-exp")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Como funciona a experiencia internacional?</span>
+                <span className="font-medium text-foreground">{t("results.details.internationalQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("international-exp") && "rotate-180")} />
               </button>
               {openItems.includes("international-exp") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      Experiencias internacionais incluem intercambios, cursos no exterior e networking global 
-                      para acelerar seu desenvolvimento de carreira através de vivências culturais únicas.
-                      Voce pode explorar programas em diversos paises e areas de atuacao.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.internationalAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -524,7 +569,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("certifications")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quais certificações são recomendadas?</span>
+                <span className="font-medium text-foreground">{t("results.details.certificationsQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("certifications") && "rotate-180")} />
               </button>
               {openItems.includes("certifications") && (
@@ -533,7 +578,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">CSPO</span>
                       <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">Google PM</span>
-                      <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">Análise de Dados</span>
+                      <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">{t("results.certifications.dataAnalysis")}</span>
                       <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">Scrum Master</span>
                     </div>
                   </div>
@@ -546,17 +591,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("networking")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Como fazer networking internacional?</span>
+                <span className="font-medium text-foreground">{t("results.details.networkingQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("networking") && "rotate-180")} />
               </button>
               {openItems.includes("networking") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      Conecte-se com profissionais do mundo todo através de eventos, comunidades online, 
-                      programas de mentoria e experiencias internacionais. Construa uma rede global 
-                      de contatos relevantes para sua carreira.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.networkingAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -588,11 +629,11 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                       <p className="text-muted-foreground">{career.description}</p>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="p-3 rounded-lg bg-secondary/50">
-                          <p className="text-muted-foreground">Faixa Salarial</p>
+                          <p className="text-muted-foreground">{t("results.details.salaryRange")}</p>
                           <p className="font-semibold text-foreground">{career.salaryRange}</p>
                         </div>
                         <div className="p-3 rounded-lg bg-secondary/50">
-                          <p className="text-muted-foreground">Crescimento</p>
+                          <p className="text-muted-foreground">{t("results.details.growth")}</p>
                           <p className="font-semibold text-green-600">{career.growthRate}</p>
                         </div>
                       </div>
@@ -614,7 +655,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                     onClick={() => toggleItem(`edu-${career.id}`)}
                     className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
                   >
-                    <span className="font-medium text-foreground">Onde estudar para {career.title}?</span>
+                    <span className="font-medium text-foreground">{t("results.details.whereStudy", { career: career.title })}</span>
                     <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes(`edu-${career.id}`) && "rotate-180")} />
                   </button>
                   {openItems.includes(`edu-${career.id}`) && (
@@ -642,19 +683,19 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("countries")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quais paises sao recomendados para estudar?</span>
+                <span className="font-medium text-foreground">{t("results.details.countriesQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("countries") && "rotate-180")} />
               </button>
               {openItems.includes("countries") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 text-sm">Estados Unidos</span>
-                      <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-600 text-sm">Reino Unido</span>
-                      <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-600 text-sm">Alemanha</span>
-                      <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 text-sm">Canada</span>
-                      <span className="px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 text-sm">Australia</span>
-                      <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 text-sm">Franca</span>
+                      <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 text-sm">{t("results.countries.usa")}</span>
+                      <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-600 text-sm">{t("results.countries.uk")}</span>
+                      <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-600 text-sm">{t("results.countries.germany")}</span>
+                      <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 text-sm">{t("results.countries.canada")}</span>
+                      <span className="px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 text-sm">{t("results.countries.australia")}</span>
+                      <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 text-sm">{t("results.countries.france")}</span>
                     </div>
                   </div>
                 </div>
@@ -667,17 +708,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("scholarships")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Existem bolsas de estudo disponiveis?</span>
+                <span className="font-medium text-foreground">{t("results.details.scholarshipsQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("scholarships") && "rotate-180")} />
               </button>
               {openItems.includes("scholarships") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4">
-                    <p className="text-muted-foreground">
-                      Sim! Existem diversas opções de bolsas de estudo para programas internacionais. 
-                      Pesquise programas governamentais, bolsas de universidades e fundacoes privadas 
-                      para encontrar as melhores oportunidades ao redor do mundo.
-                    </p>
+                    <p className="text-muted-foreground">{t("results.details.scholarshipsAnswer")}</p>
                   </div>
                 </div>
               )}
@@ -689,13 +726,13 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                 onClick={() => toggleItem("online-courses")}
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
               >
-                <span className="font-medium text-foreground">Quais cursos online sao recomendados?</span>
+                <span className="font-medium text-foreground">{t("results.details.onlineCoursesQuestion")}</span>
                 <ChevronDown className={cn("h-5 w-5 text-muted-foreground transition-transform", openItems.includes("online-courses") && "rotate-180")} />
               </button>
               {openItems.includes("online-courses") && (
                 <div className="px-5 pb-5 border-t border-border">
                   <div className="pt-4 space-y-2">
-                    <p className="text-sm text-muted-foreground">Plataformas recomendadas:</p>
+                    <p className="text-sm text-muted-foreground">{t("results.details.recommendedPlatforms")}</p>
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">Coursera</span>
                       <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">Udemy</span>
@@ -722,16 +759,16 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
           {/* Introduction Text */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-4">
             <Star className="w-4 h-4" />
-            Análise Completa
+            {t("results.hero.badge")}
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-            {userData?.name ? `${userData.name}, ` : ""}Seu Perfil Carr<span className="text-primary">IA</span>
+            {userData?.name ? t("results.hero.titlePrefixWithName", { name: userData.name }) : t("results.hero.titlePrefix")}<span className="text-primary">IA</span>{t("results.hero.titleSuffix")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-2">
-            Você é um <span className="text-primary font-semibold">{classification.title}</span>!
+            {t("results.hero.youAre")} <span className="text-primary font-semibold">{translatedProfileTitle}</span>!
           </p>
           <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-            {classification.description}
+            {translatedProfileDescription}
           </p>
 
           {/* Profile Code - Right after introduction */}
@@ -740,19 +777,19 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div className="inline-flex flex-wrap items-center justify-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-lg">
               <div className="px-4 py-3 rounded-xl bg-blue-500/10 border border-blue-500/30">
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">S{classification.levels?.S || 1}</span>
-                <p className="text-xs text-muted-foreground mt-1">Estratégico</p>
+                <p className="text-xs text-muted-foreground mt-1">{t("results.traits.strategic")}</p>
               </div>
               <div className="px-4 py-3 rounded-xl bg-purple-500/10 border border-purple-500/30">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">C{classification.levels?.C || 1}</span>
-                <p className="text-xs text-muted-foreground mt-1">Criativo</p>
+                <p className="text-xs text-muted-foreground mt-1">{t("results.traits.creative")}</p>
               </div>
               <div className="px-4 py-3 rounded-xl bg-green-500/10 border border-green-500/30">
                 <span className="text-2xl font-bold text-green-600 dark:text-green-400">E{classification.levels?.E || 1}</span>
-                <p className="text-xs text-muted-foreground mt-1">Execução</p>
+                <p className="text-xs text-muted-foreground mt-1">{t("results.traits.execution")}</p>
               </div>
               <div className="px-4 py-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
                 <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">R{classification.levels?.R || 1}</span>
-                <p className="text-xs text-muted-foreground mt-1">Relacional</p>
+                <p className="text-xs text-muted-foreground mt-1">{t("results.traits.relational")}</p>
               </div>
             </div>
           </div>
@@ -781,8 +818,8 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
                       {section.icon}
                     </span>
                     <div>
-                      <h3 className="font-semibold text-foreground">{section.title}</h3>
-                      <p className="text-sm mt-0.5">{section.questionCount.toString().padStart(2, "0")} itens</p>
+                      <h3 className="font-semibold text-foreground">{t(section.titleKey)}</h3>
+                      <p className="text-sm mt-0.5">{t("results.sections.itemCount", { count: section.questionCount.toString().padStart(2, "0") })}</p>
                     </div>
                   </div>
                 </button>
@@ -793,7 +830,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-foreground">
-                  {sections.find(s => s.id === activeSection)?.title}
+                  {t(sections.find(s => s.id === activeSection)?.titleKey || "results.sections.profile")}
                 </h2>
               </div>
               {renderSectionContent()}
@@ -810,12 +847,12 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Building className="w-4 h-4" />
-                Sobre Nos
+                {t("welcome.footer.about")}
               </h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Quem Somos</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Missao e Valores</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Carreiras</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.who")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.mission")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.careers")}</Link></li>
               </ul>
             </div>
 
@@ -823,12 +860,12 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Users className="w-4 h-4" />
-                Nossa Equipe
+                {t("welcome.footer.team")}
               </h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Fundadores</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Time de Produto</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Mentores</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("results.footer.founders")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("results.footer.productTeam")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("results.footer.mentors")}</Link></li>
               </ul>
             </div>
 
@@ -836,12 +873,12 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Star className="w-4 h-4" />
-                Nossos Parceiros
+                {t("welcome.footer.partners")}
               </h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Intercambios</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Universidades</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Empresas</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.exchanges")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.universities")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.companies")}</Link></li>
               </ul>
             </div>
 
@@ -849,12 +886,12 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <History className="w-4 h-4" />
-                Nossa Historia
+                {t("welcome.footer.history")}
               </h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Timeline</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Conquistas</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Depoimentos</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.timeline")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.achievements")}</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("welcome.footer.testimonials")}</Link></li>
               </ul>
             </div>
 
@@ -862,7 +899,7 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
             <div>
               <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                Contate-nos
+                {t("welcome.footer.contact")}
               </h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2 text-muted-foreground">
@@ -888,11 +925,11 @@ export function ResultsPage({ userData, classification, careerSuggestions, softS
               <span className="font-semibold text-foreground">Carr<span className="text-primary">IA</span></span>
             </div>
             <p className="text-sm text-muted-foreground">
-              2024 CarrIA. Todos os direitos reservados.
+              {t("welcome.footer.rights")}
             </p>
             <div className="flex items-center gap-4 text-sm">
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Privacidade</Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">Termos</Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("results.footer.privacy")}</Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">{t("results.footer.terms")}</Link>
               <Link href="/faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
             </div>
           </div>

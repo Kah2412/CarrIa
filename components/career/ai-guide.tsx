@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 
 interface AIGuideProps {
   message: string
@@ -10,6 +11,7 @@ interface AIGuideProps {
 }
 
 export function AIGuide({ message, emotion = "happy", isTyping = false }: AIGuideProps) {
+  const { t } = useTranslation()
   const emotionAnimations = {
     happy: { rotate: [0, -5, 5, 0], transition: { duration: 2, repeat: Infinity } },
     thinking: { y: [0, -5, 0], transition: { duration: 1.5, repeat: Infinity } },
@@ -27,7 +29,7 @@ export function AIGuide({ message, emotion = "happy", isTyping = false }: AIGuid
           <div className="w-full h-full rounded-full overflow-hidden bg-card flex items-center justify-center">
             <Image
               src="/characters/nexo.png"
-              alt="Nexo"
+              alt={t("nexo.name")}
               width={80}
               height={80}
               className="w-full h-full object-contain p-1"
@@ -40,7 +42,7 @@ export function AIGuide({ message, emotion = "happy", isTyping = false }: AIGuid
         <div className="bg-card rounded-2xl rounded-tl-none p-4 shadow-md border border-border/50 relative">
           <div className="absolute -left-2 top-0 w-4 h-4 bg-card border-l border-t border-border/50 transform -rotate-45" />
           
-          <p className="text-sm font-medium text-primary mb-1">Nexo</p>
+          <p className="text-sm font-medium text-primary mb-1">{t("nexo.name")}</p>
           
           <AnimatePresence mode="wait">
             {isTyping ? (
